@@ -21,7 +21,6 @@ object DateHelper {
             // format the date into another format
             destDf.format(date)
         } catch (e: Exception) {
-            e.printStackTrace()
             srcDate
         }
     }

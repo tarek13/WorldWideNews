@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class ErrorResponseEntity(
     @SerializedName("code")
-    var code: String?,
+    var code: String?=null,
     @SerializedName("message")
-    var message: String?,
+    var message: String?=null,
     @SerializedName("status")
-    var status: String?
+    var status: String?=null
 )

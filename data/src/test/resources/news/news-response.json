@@ -1,0 +1,15 @@
+{
+  "status": "status",
+  "source": "source",
+  "sortBy": "sortBy",
+  "articles": [
+    {
+      "author": "author",
+      "title": "title",
+      "description": "description",
+      "url": "url",
+      "urlToImage": "urlToImage",
+      "publishedAt": "publishedAt"
+    }
+  ]
+}

@@ -21,20 +21,36 @@ class NewsRepository @Inject constructor(
 ) : INewsRepository {
 
     override fun getNews(): Single<List<ArticleModel?>?> {
-        return newsApis.getNews("associated-press", AppConstants.API_KEY)
-            .zipWith(newsApis.getNews("the-next-web", AppConstants.API_KEY)) { associatedPressNews, theNextWebNews ->
-                val result = mutableListOf<ArticleEntity?>()
-                result.apply {
-                    associatedPressNews.articles?.toMutableList()?.let {
-                        result.addAll(it)
-                    }
-                    theNextWebNews.articles?.toMutableList()?.let {
-                        result.addAll(it)
-                    }
+        return Single.zip(
+            newsApis.getNews("associated-press", AppConstants.API_KEY),
+            newsApis.getNews("the-next-web", AppConstants.API_KEY)
+        ) { associatedPressNews, theNextWebNews ->
+            val result = mutableListOf<ArticleEntity?>()
+            result.apply {
+                associatedPressNews.articles?.toMutableList()?.let {
+                    result.addAll(it)
                 }
-            }.map { articles ->
-                articles.mapToDomainList()
+                theNextWebNews.articles?.toMutableList()?.let {
+                    result.addAll(it)
+                }
             }
+        }.map { articles ->
+            articles.mapToDomainList()
+        }
+        /*     return newsApis.getNews("associated-press", AppConstants.API_KEY)
+                 .zipWith(newsApis.getNews("the-next-web", AppConstants.API_KEY)) { associatedPressNews, theNextWebNews ->
+                     val result = mutableListOf<ArticleEntity?>()
+                     result.apply {
+                         associatedPressNews.articles?.toMutableList()?.let {
+                             result.addAll(it)
+                         }
+                         theNextWebNews.articles?.toMutableList()?.let {
+                             result.addAll(it)
+                         }
+                     }
+                 }.map { articles ->
+                     articles.mapToDomainList()
+                 }*/
     }
 
 
