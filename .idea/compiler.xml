@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="1.8">
+      <module name="World_Wide_News.buildSrc" target="11" />
+      <module name="World_Wide_News.buildSrc.main" target="11" />
+      <module name="World_Wide_News.buildSrc.test" target="11" />
+      <module name="worldwidenews.app" target="11" />
+      <module name="worldwidenews.data" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

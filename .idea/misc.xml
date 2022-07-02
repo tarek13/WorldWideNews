@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/drawable/not_found.xml" value="0.248" />
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/layout/activity_main.xml" value="0.228125" />
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/layout/fragment_home.xml" value="0.2421875" />
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/layout/fragment_news_details.xml" value="0.2421875" />
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/layout/layout_nav_menu.xml" value="0.2421875" />
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/layout/nav_header_home.xml" value="0.31979166666666664" />
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/layout/view_holder_news_item.xml" value="0.24114583333333334" />
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/menu/navigation_meni.xml" value="0.2421875" />
+        <entry key="..\:/Users/t.abdulsattar/StudioProjects/World_Wide_News/app/src/main/res/menu/side_menu.xml" value="0.2421875" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">World News</string>
+    <string name="error_load_data">Something went wrong, please try again later</string>
+    <string name="language">en</string>
+    <string name="not_connected_to_internet">Please check the network connection</string>
+    <string name="error_msg_timeout">The server took a long time to respond, try again</string>
+    <string name="explore">Explore</string>
+    <string name="live_chat">Live Chat</string>
+    <string name="gallery">Gallery</string>
+    <string name="wish_list">Wish List</string>
+    <string name="e_magazine">E-Magazine</string>
+    <string name="welcome">Welcome</string>
+    <string name="tony_roshdy">Tony Roshdy</string>
+    <string name="open_website">Open Website</string>
+    <string name="search">Search</string>
+    <string name="details">Details</string>
+    <string name="invalid_api_key">Invalid api key</string>
+    <string name="by">By</string>
+    <string name="this_is_not_valid_link">This is not valid link</string>
+</resources>
