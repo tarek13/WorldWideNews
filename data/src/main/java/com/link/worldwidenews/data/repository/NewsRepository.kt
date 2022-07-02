@@ -1,5 +1,6 @@
 package com.link.worldwidenews.data.repository
 
+import com.link.worldwidenews.data.entity.news.ArticleEntity
 import com.link.worldwidenews.data.source.remote.NewsApis
 import com.link.worldwidenews.data.util.HandleApiErrors
 import com.link.worldwidenews.data.util.mapper.error.mapToDomain
@@ -21,10 +22,21 @@ class NewsRepository @Inject constructor(
 
     override fun getNews(): Single<List<ArticleModel?>?> {
         return newsApis.getNews("associated-press", AppConstants.API_KEY)
-            .map { newsResponse ->
-                newsResponse.articles.mapToDomainList()
+            .zipWith(newsApis.getNews("the-next-web", AppConstants.API_KEY)) { associatedPressNews, theNextWebNews ->
+                val result = mutableListOf<ArticleEntity?>()
+                result.apply {
+                    associatedPressNews.articles?.toMutableList()?.let {
+                        result.addAll(it)
+                    }
+                    theNextWebNews.articles?.toMutableList()?.let {
+                        result.addAll(it)
+                    }
+                }
+            }.map { articles ->
+                articles.mapToDomainList()
             }
     }
+
 
     override fun handleLoginErrorResponse(errorBody: String?): ErrorResponseModel? {
         return handleApiErrors.handleErrorResponse(errorBody).mapToDomain()
