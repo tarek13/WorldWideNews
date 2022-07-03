@@ -5,7 +5,6 @@ plugins {
     id(GradlePlugins.safeargs)
     id(GradlePlugins.kotlinApt)
     id(GradlePlugins.hilt)
-    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -57,6 +56,7 @@ dependencies {
     implementation(AndroidSupportLibs.androidFragmentKtx)
     implementation(AndroidSupportLibs.androidActivityKtx)
     implementation(AndroidSupportLibs.swipeRefreshLayout)
+    implementation(AndroidSupportLibs.legacySupport)
 
     // ViewModel
     implementation(LifecycleLibs.viewModelKtx)
@@ -67,9 +67,7 @@ dependencies {
 
     //hilt
     implementation(DI.hilt)
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+
     kapt(DI.hiltCompiler)
 
     //CustomWidgets
