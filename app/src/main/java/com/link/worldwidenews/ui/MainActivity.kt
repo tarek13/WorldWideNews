@@ -28,6 +28,9 @@ class MainActivity : AppCompatActivity() {
 
     private val mainViewModel by viewModels<MainViewModel>()
 
+    private var searchView: SearchView?=null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,16 +50,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_home, menu)
 
-        val searchView = menu.findItem(R.id.menu_search)?.actionView as SearchView
+         searchView = menu.findItem(R.id.menu_search)?.actionView as SearchView
 
-        searchView.setSearchableInfo(
+        searchView?.setSearchableInfo(
             searchManager
                 .getSearchableInfo(componentName)
         )
-        searchView.setMaxWidth(Int.MAX_VALUE)
+        searchView?.maxWidth = Int.MAX_VALUE
 
         // listening to search query text change
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // filter recycler view when query submitted
                 mainViewModel.searchInNewsList(query.toString())
@@ -102,6 +105,14 @@ class MainActivity : AppCompatActivity() {
                 it
             )
 
+        }
+        navController?.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.newsDetailsFragment){
+                searchView?.visibility=View.GONE
+                searchView?.onActionViewCollapsed()
+            }else {
+                searchView?.visibility=View.VISIBLE
+            }
         }
     }
 
