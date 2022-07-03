@@ -8,7 +8,3 @@ fun Fragment.logoutAndClearData(clearUserData: () -> Unit) {
     clearUserData.invoke()
     findNavController().navigate(R.id.loginFragment)
 }*/
-fun Fragment.getCurrentFragment(): Fragment? {
-    val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment)
-    return navHostFragment?.childFragmentManager?.fragments?.get(0)
-}

@@ -13,6 +13,9 @@ import androidx.navigation.ui.NavigationUI
 import com.link.worldwidenews.R
 import com.link.worldwidenews.databinding.ActivityMainBinding
 import com.link.worldwidenews.databinding.LayoutNavMenuBinding
+import com.link.worldwidenews.ui.home.HomeFragment
+import com.link.worldwidenews.utils.extensions.getCurrentFragment
+import com.link.worldwidenews.utils.extensions.isVisible
 import com.link.worldwidenews.utils.extensions.searchManager
 import com.link.worldwidenews.utils.extensions.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     private var appBarConfiguration: AppBarConfiguration? = null
 
     private val mainViewModel by viewModels<MainViewModel>()
+
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_home, menu)
 
-        val searchView = menu.findItem(R.id.menu_search)?.actionView as SearchView
+        searchView = menu.findItem(R.id.menu_search)?.actionView as SearchView
 
         searchView.setSearchableInfo(
             searchManager
@@ -65,13 +70,12 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 // filter recycler view when text is changed
-                    mainViewModel.searchInNewsList(newText.toString())
+                mainViewModel.searchInNewsList(newText.toString())
                 return false
             }
         })
         return true
     }
-
 
     override fun onSupportNavigateUp(): Boolean {
         return if (navController == null || appBarConfiguration == null)
@@ -102,6 +106,18 @@ class MainActivity : AppCompatActivity() {
                 it
             )
 
+        }
+        navController?.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.newsDetailsFragment) {
+                if (::searchView.isInitialized) {
+                    searchView.visibility = View.GONE
+                    searchView.onActionViewCollapsed()
+                }
+            } else {
+                if (::searchView.isInitialized) {
+                    searchView.visibility = View.VISIBLE
+                }
+            }
         }
     }
 
