@@ -17,10 +17,28 @@ class NewsRepository @Inject constructor(
     private val newsApis: NewsApis,
     @param:Named("current_language")
     private val currentLanguage: String,
-    private val handleApiErrors: HandleApiErrors
+    private val handleApiErrors: HandleApiErrors,
+    private val dbRepository: RoomDBRepository
 ) : INewsRepository {
 
     override fun getNews(): Single<List<ArticleModel?>?> {
+
+        return dbRepository.isCached()
+            .flatMap { isCached ->
+                val isExpired=dbRepository.isExpired()
+                if (isCached && !isExpired) {
+                    dbRepository.getArticles()
+                } else {
+                    getNewsRemotely().flatMap {
+                        dbRepository.saveArticles(it).doOnComplete{
+                            dbRepository.setLastCacheTime(System.currentTimeMillis())
+                        }.toSingle { it }
+                    }
+                }
+            }
+    }
+
+    fun getNewsRemotely() :Single<List<ArticleModel?>?>{
         return Single.zip(
             newsApis.getNews("associated-press", AppConstants.API_KEY),
             newsApis.getNews("the-next-web", AppConstants.API_KEY)
@@ -37,22 +55,7 @@ class NewsRepository @Inject constructor(
         }.map { articles ->
             articles.mapToDomainList()
         }
-        /*     return newsApis.getNews("associated-press", AppConstants.API_KEY)
-                 .zipWith(newsApis.getNews("the-next-web", AppConstants.API_KEY)) { associatedPressNews, theNextWebNews ->
-                     val result = mutableListOf<ArticleEntity?>()
-                     result.apply {
-                         associatedPressNews.articles?.toMutableList()?.let {
-                             result.addAll(it)
-                         }
-                         theNextWebNews.articles?.toMutableList()?.let {
-                             result.addAll(it)
-                         }
-                     }
-                 }.map { articles ->
-                     articles.mapToDomainList()
-                 }*/
     }
-
 
     override fun handleLoginErrorResponse(errorBody: String?): ErrorResponseModel? {
         return handleApiErrors.handleErrorResponse(errorBody).mapToDomain()

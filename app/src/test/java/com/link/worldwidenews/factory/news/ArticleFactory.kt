@@ -6,6 +6,7 @@ import com.link.worldwidenews.model.news.Article
 object ArticleFactory {
     fun generateDummyArticle(): Article {
         return Article(
+            1,
             "author",
             "description",
             "publishedAt",
@@ -17,6 +18,7 @@ object ArticleFactory {
 
     fun generateDummyArticleDomain(): ArticleModel {
         return ArticleModel(
+            1,
             "author",
             "description",
             "publishedAt",
@@ -28,6 +30,7 @@ object ArticleFactory {
 
     fun generateDummyArticleWithDifferentTitle(): Article {
         return Article(
+            1,
             "author",
             "description",
             "publishedAt",

@@ -9,6 +9,7 @@ import com.link.worldwidenews.data.source.remote.NewsApis
 import com.link.worldwidenews.data.util.HandleApiErrors
 import com.link.worldwidenews.data.util.TestUtils.getJson
 import com.link.worldwidenews.domain.model.ErrorResponseModel
+import com.link.worldwidenews.domain.repository.IRoomDBRepository
 import com.link.worldwidenews.domain.util.AppConstants
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -36,6 +37,8 @@ class NewsRepositoryTest {
     @Mock
     private lateinit var handleApiErrors: HandleApiErrors
 
+    @Mock
+    private lateinit var dbRepository: RoomDBRepository
 
     @Captor
     private lateinit var stringArgumentCaptor: ArgumentCaptor<String>
@@ -46,11 +49,11 @@ class NewsRepositoryTest {
 
     @Before
     fun setup() {
-        SUT = NewsRepository(newsApis, "lang",handleApiErrors)
+        SUT = NewsRepository(newsApis, "lang",handleApiErrors,dbRepository)
     }
 
     @Test
-    fun `'getNews()' 'with token' 'then check token passed to endpoint'`() {
+    fun `'getNewsRemotely()' 'with token' 'then check token passed to endpoint'`() {
 
         //arrange
         val newsResponseEntity =
@@ -60,7 +63,7 @@ class NewsRepositoryTest {
         )
 
         //act
-        SUT.getNews()
+        SUT.getNewsRemotely()
 
         //assert
         verify(newsApis, times(2)).getNews(stringArgumentCaptor.capture(), (stringArgumentCaptor.capture()))
@@ -72,7 +75,7 @@ class NewsRepositoryTest {
     }
 
     @Test
-    fun `'getNews()' 'with source and api key' 'then return news response'`() {
+    fun `'getNewsRemotely()' 'with source and api key' 'then return news response'`() {
 
         // Arrange
         val newsResponseEntity =
@@ -83,7 +86,7 @@ class NewsRepositoryTest {
 
 
         // Act
-        val testObserver = SUT.getNews().test()
+        val testObserver = SUT.getNewsRemotely().test()
 
         // Assert
         verify(newsApis, times(2)).getNews(anyString(), anyString())
@@ -94,7 +97,7 @@ class NewsRepositoryTest {
     }
 
     @Test
-    fun `'getNews()' 'with wrong api url' 'then return error response'`() {
+    fun `'getNewsRemotely()' 'with wrong api url' 'then return error response'`() {
 
         // Arrange
         val errorMessage = "Not found"
@@ -108,7 +111,7 @@ class NewsRepositoryTest {
 
 
         // Act
-        val testObserver = SUT.getNews().test()
+        val testObserver = SUT.getNewsRemotely().test()
 
         // Assert
         testObserver.assertError {

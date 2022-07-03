@@ -1,6 +1,7 @@
 package com.link.worldwidenews.domain.util
 
 object AppConstants {
+    const val DB_NAME: String="news.db"
     const val SPLASH_TIME_OUT: Long = 2000
     const val PREF_NAME = "com.link.worldwidenews.pref_user"
     const val BASE_URL = "https://newsapi.org/"

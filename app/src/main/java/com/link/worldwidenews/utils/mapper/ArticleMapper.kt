@@ -7,6 +7,7 @@ import com.link.worldwidenews.model.news.Article
 fun ArticleModel?.mapToView(): Article? {
     return this?.run {
         Article(
+            id,
             author,
             description,
             publishedAt,
