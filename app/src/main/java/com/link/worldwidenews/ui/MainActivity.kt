@@ -3,7 +3,9 @@ package com.link.worldwidenews.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,6 +13,7 @@ import androidx.navigation.ui.NavigationUI
 import com.link.worldwidenews.R
 import com.link.worldwidenews.databinding.ActivityMainBinding
 import com.link.worldwidenews.databinding.LayoutNavMenuBinding
+import com.link.worldwidenews.utils.extensions.searchManager
 import com.link.worldwidenews.utils.extensions.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     private val navMenuBinding get() = _navMenuBinding!!
     private var navController: NavController? = null
     private var appBarConfiguration: AppBarConfiguration? = null
+
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +46,29 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_home, menu)
+
+        val searchView = menu.findItem(R.id.menu_search)?.actionView as SearchView
+
+        searchView.setSearchableInfo(
+            searchManager
+                .getSearchableInfo(componentName)
+        )
+        searchView.setMaxWidth(Int.MAX_VALUE)
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // filter recycler view when query submitted
+                mainViewModel.searchInNewsList(query.toString())
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // filter recycler view when text is changed
+                    mainViewModel.searchInNewsList(newText.toString())
+                return false
+            }
+        })
         return true
     }
 

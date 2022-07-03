@@ -1,6 +1,7 @@
 package com.link.worldwidenews.utils.extensions
 
 import android.app.DownloadManager
+import android.app.SearchManager
 import android.content.ClipboardManager
 import android.content.Context
 import android.net.ConnectivityManager
@@ -29,3 +30,6 @@ val Context.telephonyManager
 
 val Context.downloadManager
     get() = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+val Context.searchManager
+    get() = getSystemService(Context.SEARCH_SERVICE) as SearchManager

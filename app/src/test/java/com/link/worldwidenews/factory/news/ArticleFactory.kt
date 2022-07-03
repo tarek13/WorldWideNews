@@ -25,4 +25,15 @@ object ArticleFactory {
             "urlToImage"
         )
     }
+
+    fun generateDummyArticleWithDifferentTitle(): Article {
+        return Article(
+            "author",
+            "description",
+            "publishedAt",
+            "tarek",
+            "url",
+            "urlToImage"
+        )
+    }
 }

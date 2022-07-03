@@ -3,12 +3,14 @@ package com.link.worldwidenews.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.link.worldwidenews.R
 import com.link.worldwidenews.databinding.FragmentHomeBinding
 import com.link.worldwidenews.domain.util.AppConstants
 import com.link.worldwidenews.model.news.Article
+import com.link.worldwidenews.ui.MainViewModel
 import com.link.worldwidenews.utils.extensions.displayAlertDialog
 import com.link.worldwidenews.utils.extensions.gone
 import com.link.worldwidenews.utils.extensions.showToastMessage
@@ -25,6 +27,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var newsListAdapter: NewsListAdapter? = null
 
+    private val mainViewModel by activityViewModels<MainViewModel>()
+
+    private var newsList :List<Article?>?=null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,8 +60,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun observeLiveData() {
         homeViewModel.stateListener.successResponseLiveData.observe(viewLifecycleOwner) { response: Any? ->
-            val news = response as List<Article?>?
-            news?.let {
+            newsList = response as List<Article?>?
+            newsList?.let {
                 binding.newsListRecyclerView.visible()
                 binding.errorTextView.gone()
                 newsListAdapter?.setData(it)
@@ -105,6 +110,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                 )
             }
+        }
+        mainViewModel.searchQueryLiveData.observe(viewLifecycleOwner){query->
+            if(!newsList.isNullOrEmpty()){
+                homeViewModel.doSearchInNewsList(query,newsList!!)
+            }
+        }
+        homeViewModel.getSearchedListLiveData.observe(viewLifecycleOwner){ articleList->
+            articleList?.let { newsListAdapter?.setData(it) }
+
         }
     }
 

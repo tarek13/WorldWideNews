@@ -69,8 +69,8 @@ class HomeViewModelTest {
     @Test
     fun ` 'loadNews()' 'with correct data' 'then check that buildUseCaseSingle  called'`() {
         // Arrange
-        val productListItem = listOf(ArticleFactory.generateDummyArticleDomain())
-        stubGetProductListSuccess(Single.just(productListItem))
+        val article = listOf(ArticleFactory.generateDummyArticleDomain())
+        stubGetArticleListSuccess(Single.just(article))
 
         // Act
         SUT.loadNews()
@@ -82,9 +82,9 @@ class HomeViewModelTest {
     @Test
     fun ` 'loadNews()' 'with correct data' 'then return product list item response'`() {
         // Arrange
-        val productListItemDomain = listOf(ArticleFactory.generateDummyArticleDomain())
-        val productListItem = listOf(ArticleFactory.generateDummyArticle())
-        stubGetProductListSuccess(Single.just(productListItemDomain))
+        val articleDomain = listOf(ArticleFactory.generateDummyArticleDomain())
+        val article = listOf(ArticleFactory.generateDummyArticle())
+        stubGetArticleListSuccess(Single.just(articleDomain))
 
         // Act
         SUT.loadNews()
@@ -94,14 +94,14 @@ class HomeViewModelTest {
 
         // Assert
         assertEquals(loading, false)
-        assertEquals(response, productListItem)
+        assertEquals(response, article)
     }
 
     @Test
     fun ` 'loadNews()' 'with invalid url' 'then check getErrorMessage method is called'`() {
         // Arrange
         val error = RuntimeException("Wrong user name and password")
-        stubGetProductListError(error)
+        stubGetArticleListError(error)
 
         // Act
         SUT.loadNews()
@@ -112,16 +112,76 @@ class HomeViewModelTest {
         verify(errorHandlingUtils, times(1)).getErrorMessage(error, stateListener)
     }
 
+
+    @Test
+    fun ` 'doSearchInNewsList()' 'with query found in all list item' 'then return filtered list size as the original list size'`() {
+        // Arrange
+        val article = arrayListOf(ArticleFactory.generateDummyArticle())
+        article.add(ArticleFactory.generateDummyArticleWithDifferentTitle())
+        val query="t"
+
+        // Act
+        SUT.doSearchInNewsList(query,article)
+        val response = SUT.getSearchedListLiveData.getOrAwaitValueTest()
+
+        // Assert
+        assertEquals(response?.size, article.size)
+    }
+
+    @Test
+    fun ` 'doSearchInNewsList()' 'with  query not found in all list item' 'then return filtered list size is zero'`() {
+        // Arrange
+        val article = arrayListOf(ArticleFactory.generateDummyArticle())
+        article.add(ArticleFactory.generateDummyArticleWithDifferentTitle())
+        val query="o"
+
+        // Act
+        SUT.doSearchInNewsList(query,article)
+        val response = SUT.getSearchedListLiveData.getOrAwaitValueTest()
+
+        // Assert
+        assertEquals(response?.size, 0)
+    }
+
+    @Test
+    fun ` 'doSearchInNewsList()' 'with query equal null' 'then return filtered list size is zero'`() {
+        // Arrange
+        val article = arrayListOf(ArticleFactory.generateDummyArticle())
+        article.add(ArticleFactory.generateDummyArticleWithDifferentTitle())
+        val query=null
+
+        // Act
+        SUT.doSearchInNewsList(query,article)
+        val response = SUT.getSearchedListLiveData.getOrAwaitValueTest()
+
+        // Assert
+        assertEquals(response?.size, 0)
+    }
+
+    @Test
+    fun ` 'doSearchInNewsList()' 'with news list is empty' 'then return filtered list size is zero'`() {
+        // Arrange
+        val article = arrayListOf<Article>()
+        val query="t"
+
+        // Act
+        SUT.doSearchInNewsList(query,article)
+        val response = SUT.getSearchedListLiveData.getOrAwaitValueTest()
+
+        // Assert
+        assertEquals(response?.size, 0)
+    }
+
     /**
      * Stub helpers
      */
 
-    private fun stubGetProductListSuccess(single: Single<List<ArticleModel?>?>) {
+    private fun stubGetArticleListSuccess(single: Single<List<ArticleModel?>?>) {
         `when`(getNewsUseCase.buildUseCaseSingle(null))
             .thenReturn(single)
     }
 
-    private fun stubGetProductListError(
+    private fun stubGetArticleListError(
         error: Throwable,
     ) {
         `when`(getNewsUseCase.buildUseCaseSingle(null))
